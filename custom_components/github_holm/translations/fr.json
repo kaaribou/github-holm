@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Compte GitHub",
+        "description": "Collez un jeton d'accès personnel GitHub. Jeton classique : cochez la portée « repo » (dépôts privés et trafic). Jeton à granularité fine : accès à tous vos dépôts, en lecture : Metadata, Contents, Issues, Pull requests, Actions et Administration (pour le trafic).",
+        "data": {
+          "token": "Jeton d'accès personnel"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Nouveau jeton GitHub",
+        "description": "Le jeton actuel est refusé ou a expiré : collez un nouveau jeton du même compte.",
+        "data": {
+          "token": "Jeton d'accès personnel"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Jeton refusé par GitHub.",
+      "cannot_connect": "GitHub est injoignable.",
+      "wrong_account": "Ce jeton appartient à un autre compte."
+    },
+    "abort": {
+      "already_configured": "Ce compte GitHub est déjà configuré.",
+      "reauth_successful": "Nouveau jeton enregistré."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options HOLM GitHub",
+        "data": {
+          "scan_interval": "Intervalle de mise à jour",
+          "traffic": "Lire le trafic (vues et clones, 14 jours)",
+          "include_forks": "Inclure les dépôts forkés",
+          "include_archived": "Inclure les dépôts archivés",
+          "exclude": "Dépôts à ignorer (noms séparés par des virgules)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "repos": {
+        "name": "Dépôts"
+      },
+      "open_issues": {
+        "name": "Issues ouvertes"
+      },
+      "open_prs": {
+        "name": "Pull requests ouvertes"
+      },
+      "stars": {
+        "name": "Étoiles"
+      },
+      "forks": {
+        "name": "Forks"
+      },
+      "views": {
+        "name": "Vues (14 jours)"
+      },
+      "clones": {
+        "name": "Clones (14 jours)"
+      },
+      "downloads": {
+        "name": "Téléchargements"
+      },
+      "rate": {
+        "name": "Quota API restant"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Actualiser",
+      "description": "Relit tout de suite les dépôts GitHub."
+    }
+  }
+}

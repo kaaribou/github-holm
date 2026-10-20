@@ -1,0 +1,14 @@
+{
+  "domain": "github_holm",
+  "name": "HOLM GitHub",
+  "after_dependencies": ["frontend", "lovelace"],
+  "codeowners": ["@kaaribou"],
+  "config_flow": true,
+  "dependencies": ["http"],
+  "documentation": "https://github.com/kaaribou/github-holm",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/kaaribou/github-holm/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}

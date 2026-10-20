@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "GitHub account",
+        "description": "Paste a GitHub personal access token. Classic token: tick the « repo » scope (private repos and traffic). Fine-grained token: all your repositories, read access to Metadata, Contents, Issues, Pull requests, Actions and Administration (for traffic).",
+        "data": {
+          "token": "Personal access token"
+        }
+      },
+      "reauth_confirm": {
+        "title": "New GitHub token",
+        "description": "The current token is refused or expired: paste a new token for the same account.",
+        "data": {
+          "token": "Personal access token"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "GitHub refused the token.",
+      "cannot_connect": "Cannot reach GitHub.",
+      "wrong_account": "This token belongs to another account."
+    },
+    "abort": {
+      "already_configured": "This GitHub account is already configured.",
+      "reauth_successful": "New token saved."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HOLM GitHub options",
+        "data": {
+          "scan_interval": "Update interval",
+          "traffic": "Read traffic (views and clones, 14 days)",
+          "include_forks": "Include forked repositories",
+          "include_archived": "Include archived repositories",
+          "exclude": "Repositories to ignore (comma-separated names)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "repos": {
+        "name": "Repositories"
+      },
+      "open_issues": {
+        "name": "Open issues"
+      },
+      "open_prs": {
+        "name": "Open pull requests"
+      },
+      "stars": {
+        "name": "Stars"
+      },
+      "forks": {
+        "name": "Forks"
+      },
+      "views": {
+        "name": "Views (14 days)"
+      },
+      "clones": {
+        "name": "Clones (14 days)"
+      },
+      "downloads": {
+        "name": "Downloads"
+      },
+      "rate": {
+        "name": "API quota remaining"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Refresh",
+      "description": "Reload the GitHub repositories now."
+    }
+  }
+}
