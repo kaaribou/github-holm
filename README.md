@@ -18,6 +18,12 @@ HOLM GitHub découvre **tous les dépôts de votre compte**, publics et privés,
 - 🔔 **Notifications** : un évènement à chaque nouvelle issue ou pull request, pour vos automatisations.
 - 🪶 **Économe** : requêtes conditionnelles (une donnée inchangée ne consomme pas le quota GitHub), trafic relu une fois par heure.
 
+| La carte HOLM GitHub | Le détail d'un dépôt |
+|---|---|
+| ![Carte HOLM GitHub](docs/images/carte.png) | ![Détail d'un dépôt](docs/images/carte-detail.png) |
+
+<sub>Captures réalisées avec des dépôts fictifs.</sub>
+
 ---
 
 ## Installation
