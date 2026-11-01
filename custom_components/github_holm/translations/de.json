@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "GitHub-Konto",
+        "description": "Fügen Sie ein persönliches GitHub-Zugriffstoken ein. Klassisches Token: Bereich « repo » ankreuzen (private Repos und Traffic). Fine-grained-Token: alle Ihre Repositories, Lesezugriff auf Metadata, Contents, Issues, Pull requests, Actions und Administration (für den Traffic).",
+        "data": {
+          "token": "Persönliches Zugriffstoken"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Neues GitHub-Token",
+        "description": "Das aktuelle Token wird abgelehnt oder ist abgelaufen: Fügen Sie ein neues Token für dasselbe Konto ein.",
+        "data": {
+          "token": "Persönliches Zugriffstoken"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "GitHub hat das Token abgelehnt.",
+      "cannot_connect": "GitHub ist nicht erreichbar.",
+      "wrong_account": "Dieses Token gehört zu einem anderen Konto."
+    },
+    "abort": {
+      "already_configured": "Dieses GitHub-Konto ist bereits eingerichtet.",
+      "reauth_successful": "Neues Token gespeichert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen von HOLM GitHub",
+        "data": {
+          "scan_interval": "Aktualisierungsintervall",
+          "traffic": "Traffic lesen (Aufrufe und Klone, 14 Tage)",
+          "include_forks": "Geforkte Repositories einbeziehen",
+          "include_archived": "Archivierte Repositories einbeziehen",
+          "exclude": "Zu ignorierende Repositories (Namen durch Komma getrennt)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "repos": {
+        "name": "Repositories"
+      },
+      "open_issues": {
+        "name": "Offene Issues"
+      },
+      "open_prs": {
+        "name": "Offene Pull-Requests"
+      },
+      "stars": {
+        "name": "Sterne"
+      },
+      "forks": {
+        "name": "Forks"
+      },
+      "views": {
+        "name": "Aufrufe (14 Tage)"
+      },
+      "clones": {
+        "name": "Klone (14 Tage)"
+      },
+      "downloads": {
+        "name": "Downloads"
+      },
+      "rate": {
+        "name": "Verbleibendes API-Kontingent"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Aktualisieren",
+      "description": "Die GitHub-Repositories jetzt neu laden."
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "GitHub-account",
+        "description": "Plak een persoonlijk GitHub-toegangstoken. Klassiek token: vink de scope « repo » aan (privé-repo's en verkeer). Fine-grained token: al je repositories, leestoegang tot Metadata, Contents, Issues, Pull requests, Actions en Administration (voor het verkeer).",
+        "data": {
+          "token": "Persoonlijk toegangstoken"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Nieuw GitHub-token",
+        "description": "Het huidige token wordt geweigerd of is verlopen: plak een nieuw token voor hetzelfde account.",
+        "data": {
+          "token": "Persoonlijk toegangstoken"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "GitHub heeft het token geweigerd.",
+      "cannot_connect": "GitHub is niet bereikbaar.",
+      "wrong_account": "Dit token hoort bij een ander account."
+    },
+    "abort": {
+      "already_configured": "Dit GitHub-account is al ingesteld.",
+      "reauth_successful": "Nieuw token opgeslagen."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opties van HOLM GitHub",
+        "data": {
+          "scan_interval": "Bijwerkinterval",
+          "traffic": "Verkeer lezen (weergaven en klonen, 14 dagen)",
+          "include_forks": "Geforkte repositories meenemen",
+          "include_archived": "Gearchiveerde repositories meenemen",
+          "exclude": "Te negeren repositories (namen gescheiden door komma's)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "repos": {
+        "name": "Repositories"
+      },
+      "open_issues": {
+        "name": "Open issues"
+      },
+      "open_prs": {
+        "name": "Open pull requests"
+      },
+      "stars": {
+        "name": "Sterren"
+      },
+      "forks": {
+        "name": "Forks"
+      },
+      "views": {
+        "name": "Weergaven (14 dagen)"
+      },
+      "clones": {
+        "name": "Klonen (14 dagen)"
+      },
+      "downloads": {
+        "name": "Downloads"
+      },
+      "rate": {
+        "name": "Resterend API-quotum"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Vernieuwen",
+      "description": "De GitHub-repositories nu opnieuw laden."
+    }
+  }
+}

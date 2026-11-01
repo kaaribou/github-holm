@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konto GitHub",
+        "description": "Wklej osobisty token dostępu GitHub. Token klasyczny: zaznacz zakres « repo » (prywatne repozytoria i ruch). Token fine-grained: wszystkie repozytoria, odczyt Metadata, Contents, Issues, Pull requests, Actions i Administration (dla ruchu).",
+        "data": {
+          "token": "Osobisty token dostępu"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Nowy token GitHub",
+        "description": "Obecny token jest odrzucany lub wygasł: wklej nowy token dla tego samego konta.",
+        "data": {
+          "token": "Osobisty token dostępu"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "GitHub odrzucił token.",
+      "cannot_connect": "Nie można połączyć się z GitHub.",
+      "wrong_account": "Ten token należy do innego konta."
+    },
+    "abort": {
+      "already_configured": "To konto GitHub jest już skonfigurowane.",
+      "reauth_successful": "Zapisano nowy token."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje HOLM GitHub",
+        "data": {
+          "scan_interval": "Interwał aktualizacji",
+          "traffic": "Odczytuj ruch (wyświetlenia i klony, 14 dni)",
+          "include_forks": "Uwzględnij forki repozytoriów",
+          "include_archived": "Uwzględnij zarchiwizowane repozytoria",
+          "exclude": "Repozytoria do pominięcia (nazwy oddzielone przecinkami)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "repos": {
+        "name": "Repozytoria"
+      },
+      "open_issues": {
+        "name": "Otwarte zgłoszenia"
+      },
+      "open_prs": {
+        "name": "Otwarte pull requesty"
+      },
+      "stars": {
+        "name": "Gwiazdki"
+      },
+      "forks": {
+        "name": "Forki"
+      },
+      "views": {
+        "name": "Wyświetlenia (14 dni)"
+      },
+      "clones": {
+        "name": "Klony (14 dni)"
+      },
+      "downloads": {
+        "name": "Pobrania"
+      },
+      "rate": {
+        "name": "Pozostały limit API"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Odśwież",
+      "description": "Załaduj teraz ponownie repozytoria GitHub."
+    }
+  }
+}

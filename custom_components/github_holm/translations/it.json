@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Account GitHub",
+        "description": "Incolla un token di accesso personale GitHub. Token classico: spunta l'ambito « repo » (repository privati e traffico). Token fine-grained: tutti i tuoi repository, accesso in lettura a Metadata, Contents, Issues, Pull requests, Actions e Administration (per il traffico).",
+        "data": {
+          "token": "Token di accesso personale"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Nuovo token GitHub",
+        "description": "Il token attuale è rifiutato o scaduto: incolla un nuovo token per lo stesso account.",
+        "data": {
+          "token": "Token di accesso personale"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "GitHub ha rifiutato il token.",
+      "cannot_connect": "Impossibile raggiungere GitHub.",
+      "wrong_account": "Questo token appartiene a un altro account."
+    },
+    "abort": {
+      "already_configured": "Questo account GitHub è già configurato.",
+      "reauth_successful": "Nuovo token salvato."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni di HOLM GitHub",
+        "data": {
+          "scan_interval": "Intervallo di aggiornamento",
+          "traffic": "Leggi il traffico (visite e clonazioni, 14 giorni)",
+          "include_forks": "Includi i repository fork",
+          "include_archived": "Includi i repository archiviati",
+          "exclude": "Repository da ignorare (nomi separati da virgole)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "repos": {
+        "name": "Repository"
+      },
+      "open_issues": {
+        "name": "Issue aperte"
+      },
+      "open_prs": {
+        "name": "Pull request aperte"
+      },
+      "stars": {
+        "name": "Stelle"
+      },
+      "forks": {
+        "name": "Fork"
+      },
+      "views": {
+        "name": "Visite (14 giorni)"
+      },
+      "clones": {
+        "name": "Clonazioni (14 giorni)"
+      },
+      "downloads": {
+        "name": "Download"
+      },
+      "rate": {
+        "name": "Quota API rimanente"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Aggiorna",
+      "description": "Ricarica ora i repository GitHub."
+    }
+  }
+}

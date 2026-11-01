@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+- **8 langues** : traductions allemand, espagnol, italien, néerlandais, portugais et polonais ajoutées (configuration, options, entités, actions), en plus du français et de l'anglais. Carte HOLM GitHub traduite elle aussi (éditeur compris), avec une nouvelle option `language` ; elle suit sinon la langue du profil Home Assistant (anglais si la langue n'est pas traduite).
+- README en anglais (`README.en.md`).
+
 ## 1.0.0
 
 - Première version : tous les dépôts d'un compte GitHub (publics et privés) dans Home Assistant, avec un simple jeton d'accès personnel.

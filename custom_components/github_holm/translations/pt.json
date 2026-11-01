@@ -1,0 +1,80 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Conta do GitHub",
+        "description": "Cole um token de acesso pessoal do GitHub. Token clássico: marque o âmbito « repo » (repositórios privados e tráfego). Token fine-grained: todos os seus repositórios, acesso de leitura a Metadata, Contents, Issues, Pull requests, Actions e Administration (para o tráfego).",
+        "data": {
+          "token": "Token de acesso pessoal"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Novo token do GitHub",
+        "description": "O token atual foi recusado ou expirou: cole um novo token da mesma conta.",
+        "data": {
+          "token": "Token de acesso pessoal"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "O GitHub recusou o token.",
+      "cannot_connect": "Não é possível contactar o GitHub.",
+      "wrong_account": "Este token pertence a outra conta."
+    },
+    "abort": {
+      "already_configured": "Esta conta do GitHub já está configurada.",
+      "reauth_successful": "Novo token guardado."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções do HOLM GitHub",
+        "data": {
+          "scan_interval": "Intervalo de atualização",
+          "traffic": "Ler o tráfego (visitas e clones, 14 dias)",
+          "include_forks": "Incluir repositórios bifurcados (forks)",
+          "include_archived": "Incluir repositórios arquivados",
+          "exclude": "Repositórios a ignorar (nomes separados por vírgulas)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "repos": {
+        "name": "Repositórios"
+      },
+      "open_issues": {
+        "name": "Issues abertas"
+      },
+      "open_prs": {
+        "name": "Pull requests abertos"
+      },
+      "stars": {
+        "name": "Estrelas"
+      },
+      "forks": {
+        "name": "Forks"
+      },
+      "views": {
+        "name": "Visitas (14 dias)"
+      },
+      "clones": {
+        "name": "Clones (14 dias)"
+      },
+      "downloads": {
+        "name": "Transferências"
+      },
+      "rate": {
+        "name": "Quota de API restante"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Atualizar",
+      "description": "Recarregar agora os repositórios do GitHub."
+    }
+  }
+}

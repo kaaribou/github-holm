@@ -4,6 +4,8 @@
 ![Version](https://img.shields.io/github/v/release/kaaribou/github-holm)
 ![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2025.8%2B-03a9f4)
 
+🇫🇷 Français · [🇬🇧 English](README.en.md)
+
 **Tous vos dépôts GitHub d'un coup d'œil dans Home Assistant : issues et pull requests à traiter, dernières releases, validation, étoiles, vues et téléchargements.**
 
 HOLM GitHub découvre **tous les dépôts de votre compte**, publics et privés, à partir d'un simple jeton d'accès personnel. Pas besoin de déclarer les dépôts un par un : un nouveau dépôt apparaît tout seul. La carte **HOLM GitHub**, fournie avec l'intégration, montre en un écran ce qui demande votre attention.
@@ -23,6 +25,12 @@ HOLM GitHub découvre **tous les dépôts de votre compte**, publics et privés,
 | ![Carte HOLM GitHub](docs/images/carte.png) | ![Détail d'un dépôt](docs/images/carte-detail.png) |
 
 <sub>Captures réalisées avec des dépôts fictifs.</sub>
+
+
+### 🆕 Nouveautés de la 1.1.0
+
+- 🌍 **8 langues** : l'intégration (configuration, options, entités, actions) est traduite en français, anglais, allemand, espagnol, italien, néerlandais, portugais et polonais, selon la langue de Home Assistant. La carte **HOLM GitHub** aussi, éditeur compris ; son option `language` permet d'imposer une langue.
+- 🇬🇧 README en anglais.
 
 ---
 
@@ -83,6 +91,7 @@ sort: activity      # activity, issues, stars, views, name
 | Option | Description | Par défaut |
 |---|---|---|
 | `title` | Titre | `Mes dépôts GitHub` |
+| `language` | Langue de la carte : `fr`, `en`, `de`, `es`, `it`, `nl`, `pt`, `pl` | celle du profil |
 | `filter` | Filtre affiché à l'ouverture | `all` |
 | `sort` | Tri à l'ouverture | `activity` |
 | `show_private` | Afficher les dépôts privés | `true` |
