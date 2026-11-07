@@ -33,9 +33,17 @@
         "data": {
           "scan_interval": "Intervalo de atualização",
           "traffic": "Ler o tráfego (visitas e clones, 14 dias)",
+          "forks_of_archived": "Incluir os forks cujo original está arquivado",
           "include_forks": "Incluir repositórios bifurcados (forks)",
           "include_archived": "Incluir repositórios arquivados",
+          "include": "Repositórios sempre mostrados (nomes separados por vírgulas)",
           "exclude": "Repositórios a ignorar (nomes separados por vírgulas)"
+        },
+        "data_description": {
+          "forks_of_archived": "Um fork cujo repositório original está arquivado costuma ser um projeto que você retomou: é mostrado mesmo sem a opção seguinte.",
+          "include_forks": "Mostra todos os seus forks, incluindo os feitos para propor uma pull request.",
+          "include": "Mostrados sempre, mesmo forks ou arquivados. Ex.: somfy-protexial, meu-fork",
+          "exclude": "Nunca mostrados, mesmo que estejam na lista anterior."
         }
       }
     }

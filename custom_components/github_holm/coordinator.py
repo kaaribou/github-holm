@@ -14,8 +14,8 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from homeassistant.util import dt as dt_util
 
 from .api import GitHubAuthError, GitHubClient, GitHubError
-from .const import (CONF_ARCHIVED, CONF_EXCLUDE, CONF_FORKS, CONF_SCAN, CONF_TRAFFIC, DEFAULT_SCAN, DOMAIN,
-                    EVENT_NEW_ITEM, MAX_PARALLEL, TRAFFIC_EVERY)
+from .const import (CONF_ARCHIVED, CONF_EXCLUDE, CONF_FORKS, CONF_FORKS_ARCHIVED, CONF_INCLUDE, CONF_SCAN, CONF_TRAFFIC,
+                    DEFAULT_SCAN, DOMAIN, EVENT_NEW_ITEM, MAX_PARALLEL, PARENT_EVERY, TRAFFIC_EVERY)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -37,17 +37,44 @@ class GitHubCoordinator(DataUpdateCoordinator[dict]):
         self._traffic: dict[str, dict | None] = {}
         self._traffic_at: float | None = None
         self._known: dict[str, set[int]] | None = None   # issues/PR déjà vues (None = premier passage)
+        self._parents: dict[str, tuple[float, dict | None]] = {}   # fork -> (lu à, original)
 
-    def _wanted(self, r: dict) -> bool:
+    @staticmethod
+    def _names(v: Any) -> set[str]:
+        return {x.strip().lower() for x in str(v or "").split(",") if x.strip()}
+
+    def _listed(self, r: dict, key: str) -> bool:
+        """Le dépôt figure dans une liste d'options (par nom ou par propriétaire/nom)."""
+        names = self._names(self.entry.options.get(key, ""))
+        return r.get("name", "").lower() in names or r.get("full_name", "").lower() in names
+
+    def _wanted(self, r: dict) -> bool | None:
+        """Premier tri, sans appel à l'API : True, False, ou None si cela dépend de l'original du fork."""
         o = self.entry.options
-        exclude = {x.strip().lower() for x in str(o.get(CONF_EXCLUDE, "")).split(",") if x.strip()}
-        if r.get("name", "").lower() in exclude:
+        if self._listed(r, CONF_EXCLUDE):
             return False
-        if r.get("fork") and not o.get(CONF_FORKS, False):
-            return False
+        if self._listed(r, CONF_INCLUDE):
+            return True                      # toujours inclus, même fork ou archivé
         if r.get("archived") and not o.get(CONF_ARCHIVED, False):
             return False
+        if r.get("fork") and not o.get(CONF_FORKS, False):
+            return None if o.get(CONF_FORKS_ARCHIVED, True) else False
         return True
+
+    async def _parent(self, r: dict) -> dict | None:
+        """Original d'un fork (nom, lien, archivé ou non), relu une fois par jour."""
+        full = r["full_name"]
+        hit = self._parents.get(full)
+        if hit and time.monotonic() - hit[0] < PARENT_EVERY:
+            return hit[1]
+        data, _ = await self.client.get(f"/repos/{full}")
+        if not isinstance(data, dict):
+            return hit[1] if hit else None   # lecture impossible : on garde l'ancienne réponse, on réessaiera
+        p = data.get("parent")
+        out = {"full_name": p.get("full_name"), "url": p.get("html_url"), "archived": bool(p.get("archived")),
+               "owner": (p.get("owner") or {}).get("login")} if p else None
+        self._parents[full] = (time.monotonic(), out)
+        return out
 
     async def _details(self, r: dict, traffic: bool) -> dict:
         c, full = self.client, r["full_name"]
@@ -108,19 +135,29 @@ class GitHubCoordinator(DataUpdateCoordinator[dict]):
     async def _async_update_data(self) -> dict[str, Any]:
         try:
             raw = await self.client.paged("/user/repos", {"affiliation": "owner", "sort": "pushed"})
-            repos = [r for r in raw if self._wanted(r)]
-            traffic = bool(self.entry.options.get(CONF_TRAFFIC, True)) and (self._traffic_at is None or time.monotonic() - self._traffic_at > TRAFFIC_EVERY)
             sem = asyncio.Semaphore(MAX_PARALLEL)
+            verdict = [self._wanted(r) for r in raw]
+            forks = [r for r, v in zip(raw, verdict) if v is not False and r.get("fork")]
+
+            async def parent(r: dict) -> dict | None:
+                async with sem:
+                    return await self._parent(r)
+
+            parents = dict(zip([r["full_name"] for r in forks], await asyncio.gather(*(parent(r) for r in forks))))
+            repos = [r for r, v in zip(raw, verdict)
+                     if v is True or (v is None and (parents.get(r["full_name"]) or {}).get("archived"))]
+            self._parents = {k: v for k, v in self._parents.items() if k in parents}
+            traffic = bool(self.entry.options.get(CONF_TRAFFIC, True)) and (self._traffic_at is None or time.monotonic() - self._traffic_at > TRAFFIC_EVERY)
 
             async def one(r: dict) -> dict:
                 async with sem:
                     try:
-                        return await self._details(r, traffic)
+                        return {**await self._details(r, traffic), "parent": parents.get(r["full_name"])}
                     except (GitHubAuthError, GitHubError):
                         raise
                     except Exception:  # noqa: BLE001 — un dépôt inattendu ne doit pas tout bloquer
                         _LOGGER.exception("Lecture du dépôt %s impossible", r.get("full_name"))
-                        return self._basic(r)
+                        return {**self._basic(r), "parent": parents.get(r["full_name"])}
 
             details = await asyncio.gather(*(one(r) for r in repos))
             if traffic:

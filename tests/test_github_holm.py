@@ -20,7 +20,12 @@ class FakeGitHub:
             {"name": "beta", "full_name": "me/beta", "private": True, "stargazers_count": 0, "forks_count": 0, "open_issues_count": 0,
              "pushed_at": "2026-10-10T10:00:00Z", "html_url": "https://github.com/me/beta"},
             {"name": "gamma", "full_name": "me/gamma", "fork": True, "stargazers_count": 9, "open_issues_count": 0},
+            {"name": "delta", "full_name": "me/delta", "fork": True, "stargazers_count": 2, "open_issues_count": 0},
+            {"name": "old", "full_name": "me/old", "archived": True, "stargazers_count": 0, "open_issues_count": 0},
         ]
+        # original de chaque fork : gamma = fork d'un projet actif, delta = fork d'un projet archivé (repris)
+        self.parents = {"gamma": {"full_name": "up/gamma", "html_url": "https://github.com/up/gamma", "archived": False, "owner": {"login": "up"}},
+                        "delta": {"full_name": "the8tre/delta", "html_url": "https://github.com/the8tre/delta", "archived": True, "owner": {"login": "the8tre"}}}
 
     async def handle(self, request: web.Request):
         self.calls.append(request.path)
@@ -35,6 +40,8 @@ class FakeGitHub:
         if p == "/user/repos":
             return web.json_response(self.repos, headers=h)
         name = p.split("/")[3]
+        if p.count("/") == 3:                                   # /repos/me/<nom> : détail du dépôt (original du fork)
+            return web.json_response({"full_name": f"me/{name}", "parent": self.parents.get(name)}, headers=h)
         if p.endswith("/releases"):
             data = [{"tag_name": "v1.1.0", "name": "1.1.0", "published_at": "2026-10-18T00:00:00Z", "html_url": "r",
                      "assets": [{"download_count": 7}]}, {"tag_name": "v1.0.0", "assets": [{"download_count": 3}]}] if name == "alpha" else []
@@ -81,7 +88,9 @@ async def test_data_and_sensors(hass, gh):
     entry = await _setup(hass)
     data = entry.runtime_data.data
     names = [r["name"] for r in data["repos"]]
-    assert names == ["alpha", "beta"]                      # le fork est ignoré par défaut
+    assert names == ["alpha", "beta", "delta"]             # fork d'un projet actif ignoré, fork d'un projet archivé gardé
+    assert data["repos"][2]["parent"] == {"full_name": "the8tre/delta", "url": "https://github.com/the8tre/delta", "archived": True, "owner": "the8tre"}
+    assert data["repos"][0]["parent"] is None
     a = data["repos"][0]
     assert a["open_issues"] == 1 and a["open_prs"] == 1
     assert a["release"]["tag"] == "v1.1.0" and a["releases"] == 2 and a["downloads"] == 10
@@ -92,8 +101,8 @@ async def test_data_and_sensors(hass, gh):
     st = hass.states
     assert st.get("sensor.github_me_issues_ouvertes").state == "1"
     assert st.get("sensor.github_me_pull_requests_ouvertes").state == "1"
-    assert st.get("sensor.github_me_etoiles").state == "3"
-    assert st.get("sensor.github_me_vues_14_jours").state == "40"
+    assert st.get("sensor.github_me_etoiles").state == "5"                # 3 + 2 du fork repris
+    assert st.get("sensor.github_me_vues_14_jours").state == "80"
     assert st.get("sensor.github_me_telechargements").state == "10"
     assert st.get("sensor.github_me_depots").attributes["prives"] == 1
 
@@ -105,7 +114,8 @@ async def test_websocket_and_options(hass, gh, hass_ws_client):
     msg = await ws.receive_json()
     assert msg["success"]
     repos = msg["result"]["accounts"][0]["repos"]
-    assert [r["name"] for r in repos] == ["alpha", "gamma"]
+    assert [r["name"] for r in repos] == ["alpha", "gamma", "delta"]
+    assert repos[1]["parent"]["full_name"] == "up/gamma"
     assert msg["result"]["accounts"][0]["owner"] == "Me"
 
 
@@ -121,8 +131,24 @@ async def test_new_issue_event_and_etag(hass, gh):
     await hass.async_block_till_done()
     assert events == [{"repo": "alpha", "type": "issue", "number": 3, "title": "Nouvelle demande", "url": "u3", "user": "z"}]
     assert c.data["repos"][0]["open_issues"] == 1           # open_issues_count simulé inchangé (2) − 2 PR? non : 1 PR
-    # le trafic n'est relu qu'une fois par heure
-    assert sum(1 for p in gh.calls if p.endswith("/traffic/views")) == 2
+    # le trafic n'est relu qu'une fois par heure, l'original des forks une fois par jour
+    assert sum(1 for p in gh.calls if p.endswith("/traffic/views")) == 3
+    assert gh.calls.count("/repos/me/delta") == 1 and gh.calls.count("/repos/me/gamma") == 1
+
+
+async def test_fork_options(hass, gh):
+    # option désactivée : aucun fork, aucun appel pour lire les originaux
+    entry = await _setup(hass, {"forks_of_archived": False})
+    assert [r["name"] for r in entry.runtime_data.data["repos"]] == ["alpha", "beta"]
+    assert not any(p in gh.calls for p in ("/repos/me/gamma", "/repos/me/delta"))
+
+
+async def test_include_list(hass, gh):
+    # « toujours inclus » : par nom ou propriétaire/nom, l'emporte sur forks et archivés ; « ignorer » l'emporte sur tout
+    entry = await _setup(hass, {"forks_of_archived": False, "include": " Gamma, me/old ,delta", "exclude": "delta"})
+    repos = entry.runtime_data.data["repos"]
+    assert [r["name"] for r in repos] == ["alpha", "beta", "gamma", "old"]
+    assert repos[2]["parent"]["full_name"] == "up/gamma"
 
 
 async def test_bad_token_starts_reauth(hass, gh):

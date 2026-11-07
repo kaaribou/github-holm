@@ -12,7 +12,8 @@ HOLM GitHub découvre **tous les dépôts de votre compte**, publics et privés,
 
 ### En bref
 
-- 🗂️ **Tous les dépôts du compte**, publics et privés ; forks, archives et dépôts choisis peuvent être exclus.
+- 🗂️ **Tous les dépôts du compte**, publics et privés ; forks, archives et dépôts choisis peuvent être inclus ou exclus.
+- 🍴 **Les forks que vous avez repris** (dont l'original est archivé) apparaissent tout seuls, avec l'original indiqué.
 - 🐞 **Issues et pull requests ouvertes** : titres, étiquettes, auteurs, commentaires, et la mention « nouveau » pendant 7 jours.
 - 🏷️ **Releases** : dernière version et sa date, nombre de releases, téléchargements des fichiers attachés.
 - ✅ **Validation** : état du dernier passage GitHub Actions (validation HACS par exemple), avec alerte en cas d'échec.
@@ -27,7 +28,15 @@ HOLM GitHub découvre **tous les dépôts de votre compte**, publics et privés,
 <sub>Captures réalisées avec des dépôts fictifs.</sub>
 
 
-### 🆕 Nouveautés de la 1.1.0
+### 🆕 Nouveautés de la 1.2.0
+
+- 🍴 **Forks repris** (merci à AuroreVgn pour l'idée) : quand le dépôt d'origine d'un de vos forks est **archivé**, c'est que vous avez sans doute repris le projet. Ce fork est désormais affiché, comme vos propres dépôts, sans avoir à inclure tous vos forks. Option **Inclure les forks dont l'original est archivé**, activée par défaut. Voir [Forks et dépôts archivés](#forks-et-dépôts-archivés).
+- 📌 **Dépôts toujours affichés** : une liste de noms affichés quoi qu'il arrive, même forks ou archivés, le pendant de « Dépôts à ignorer ».
+- 🔗 **L'original d'un fork sur la carte** : une icône 🍴 à côté du nom, et dans le détail une ligne « Fork de propriétaire/dépôt » vers l'original, avec la mention « original archivé » le cas échéant.
+
+![Un fork repris dans la carte : icône fork à côté du nom et ligne « Fork de … » dans le détail](docs/images/fork.png)
+
+### Nouveautés de la 1.1.0
 
 - 🌍 **8 langues** : l'intégration (configuration, options, entités, actions) est traduite en français, anglais, allemand, espagnol, italien, néerlandais, portugais et polonais, selon la langue de Home Assistant. La carte **HOLM GitHub** aussi, éditeur compris ; son option `language` permet d'imposer une langue.
 - 🇬🇧 README en anglais.
@@ -67,9 +76,27 @@ Paramètres → Appareils et services → **Ajouter une intégration** → **HOL
 |---|---|---|
 | Intervalle de mise à jour | Fréquence de lecture des dépôts | 15 min |
 | Lire le trafic | Vues et clones sur 14 jours | oui |
-| Inclure les dépôts forkés | | non |
-| Inclure les dépôts archivés | | non |
-| Dépôts à ignorer | Noms séparés par des virgules | — |
+| Inclure les forks dont l'original est archivé | Affiche les forks que vous avez repris (voir ci-dessous) | oui |
+| Inclure les dépôts forkés | Affiche **tous** vos forks, y compris ceux faits pour proposer une pull request | non |
+| Inclure les dépôts archivés | Affiche vos propres dépôts archivés (grisés sur la carte) | non |
+| Dépôts toujours affichés | Noms séparés par des virgules, affichés quoi qu'il arrive | — |
+| Dépôts à ignorer | Noms séparés par des virgules, jamais affichés | — |
+
+Dans les deux listes, un dépôt s'écrit par son nom (`somfy-protexial`) ou avec son propriétaire (`kaaribou/somfy-protexial`), sans tenir compte des majuscules.
+
+### Forks et dépôts archivés
+
+Par défaut, HOLM GitHub montre vos propres dépôts et laisse de côté les forks et les dépôts archivés. Pour chaque dépôt, la règle est appliquée dans cet ordre :
+
+1. **Dépôts à ignorer** : jamais affiché, même s'il figure dans la liste suivante.
+2. **Dépôts toujours affichés** : affiché, même fork ou archivé.
+3. **Dépôt archivé** : affiché seulement si **Inclure les dépôts archivés** est cochée.
+4. **Fork** : affiché si **Inclure les dépôts forkés** est cochée ; sinon, affiché seulement si son original est archivé et que **Inclure les forks dont l'original est archivé** est cochée.
+5. Tous les autres dépôts sont affichés.
+
+**Pourquoi « l'original est archivé » ?** Quand l'auteur d'un projet l'archive, il ne le maintient plus. Si vous en avez un fork, c'est souvent vous qui avez repris le flambeau : votre fork est devenu le dépôt principal. À l'inverse, un fork d'un projet toujours actif sert en général à proposer une pull request, et n'a pas sa place parmi vos projets.
+
+Pour savoir si l'original est archivé, HOLM GitHub fait **une requête par fork, une fois par jour** : c'est négligeable par rapport au quota GitHub. Décochez l'option si vous ne voulez aucun fork : plus aucune requête n'est faite pour eux.
 
 ## La carte HOLM GitHub
 
@@ -86,7 +113,8 @@ sort: activity      # activity, issues, stars, views, name
 - **Alerte** quand une validation est en échec.
 - **Filtres** Tous, À traiter, Publics, Privés, **recherche** et **tri** par activité, issues, étoiles, vues ou nom.
 - **Une ligne par dépôt** : voyant de validation, version et date, badges issues et PR, étoiles, vues sur 14 jours.
-- **Détail dépliable** : description et sujets, statistiques, dernière release, dernier commit, validation, liste des issues et PR avec étiquettes, et raccourcis vers le dépôt, les issues, les PR, les releases et le trafic.
+- **Icônes à côté du nom** : 🔒 dépôt privé, 🍴 fork (au survol : « Fork de propriétaire/dépôt »). Un dépôt archivé apparaît grisé.
+- **Détail dépliable** : description et sujets, statistiques, pour un fork la ligne **Fork de propriétaire/dépôt** (lien vers l'original, avec la mention « original archivé » si c'est le cas), dernière release, dernier commit, validation, liste des issues et PR avec étiquettes, et raccourcis vers le dépôt, les issues, les PR, les releases et le trafic.
 
 | Option | Description | Par défaut |
 |---|---|---|
@@ -136,6 +164,10 @@ actions:
 **Pas de trafic pour certains dépôts.** GitHub ne donne le trafic qu'aux comptes qui peuvent écrire dans le dépôt, et le jeton doit avoir la portée `repo` (ou *Administration* en lecture pour un jeton à granularité fine).
 
 **Le quota d'API.** Avec un jeton, GitHub autorise 5 000 requêtes par heure. Une mise à jour coûte environ 4 requêtes par dépôt, et les données inchangées ne comptent pas : même avec 50 dépôts, on reste loin de la limite.
+
+**Un de mes forks n'apparaît pas.** Seuls les forks dont l'original est archivé sont affichés automatiquement. Ajoutez son nom dans **Dépôts toujours affichés**, ou cochez **Inclure les dépôts forkés** pour les voir tous.
+
+**Un fork apparaît alors que je ne le veux pas.** Ajoutez son nom dans **Dépôts à ignorer**, ou décochez **Inclure les forks dont l'original est archivé**.
 
 **Le nombre d'issues diffère de GitHub.** GitHub compte ensemble issues et pull requests ; HOLM GitHub les sépare.
 

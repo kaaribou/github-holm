@@ -33,9 +33,17 @@
         "data": {
           "scan_interval": "Intervalle de mise à jour",
           "traffic": "Lire le trafic (vues et clones, 14 jours)",
+          "forks_of_archived": "Inclure les forks dont l'original est archivé",
           "include_forks": "Inclure les dépôts forkés",
           "include_archived": "Inclure les dépôts archivés",
+          "include": "Dépôts toujours affichés (noms séparés par des virgules)",
           "exclude": "Dépôts à ignorer (noms séparés par des virgules)"
+        },
+        "data_description": {
+          "forks_of_archived": "Un fork dont le dépôt d'origine est archivé est en général un projet que vous avez repris : il est affiché même sans l'option suivante.",
+          "include_forks": "Affiche tous vos forks, y compris ceux faits pour proposer une pull request.",
+          "include": "Affichés quoi qu'il arrive, même forks ou archivés. Ex. : somfy-protexial, mon-fork",
+          "exclude": "Jamais affichés, même s'ils figurent dans la liste précédente."
         }
       }
     }

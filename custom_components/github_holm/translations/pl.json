@@ -33,9 +33,17 @@
         "data": {
           "scan_interval": "Interwał aktualizacji",
           "traffic": "Odczytuj ruch (wyświetlenia i klony, 14 dni)",
+          "forks_of_archived": "Uwzględnij forki, których oryginał jest zarchiwizowany",
           "include_forks": "Uwzględnij forki repozytoriów",
           "include_archived": "Uwzględnij zarchiwizowane repozytoria",
+          "include": "Zawsze wyświetlane repozytoria (nazwy oddzielone przecinkami)",
           "exclude": "Repozytoria do pominięcia (nazwy oddzielone przecinkami)"
+        },
+        "data_description": {
+          "forks_of_archived": "Fork, którego oryginalne repozytorium jest zarchiwizowane, to zwykle projekt przejęty przez Ciebie: jest wyświetlany nawet bez następnej opcji.",
+          "include_forks": "Pokazuje wszystkie Twoje forki, także te utworzone, by zaproponować pull request.",
+          "include": "Wyświetlane zawsze, nawet forki lub zarchiwizowane. Np.: somfy-protexial, moj-fork",
+          "exclude": "Nigdy nie wyświetlane, nawet jeśli są na poprzedniej liście."
         }
       }
     }

@@ -12,7 +12,8 @@ HOLM GitHub discovers **all the repos of your account**, public and private, fro
 
 ### At a glance
 
-- 🗂️ **All the account's repos**, public and private; forks, archives and chosen repos can be excluded.
+- 🗂️ **All the account's repos**, public and private; forks, archives and chosen repos can be included or excluded.
+- 🍴 **Forks you took over** (whose original is archived) show up on their own, with the original shown.
 - 🐞 **Open issues and pull requests**: titles, labels, authors, comments, and a “new” tag for 7 days.
 - 🏷️ **Releases**: latest version and its date, number of releases, downloads of attached files.
 - ✅ **Checks**: state of the last GitHub Actions run (HACS validation for instance), with an alert on failure.
@@ -27,7 +28,15 @@ HOLM GitHub discovers **all the repos of your account**, public and private, fro
 
 <sub>Screenshots made with fictitious repos, in French — the card follows the language of your Home Assistant profile.</sub>
 
-### 🆕 What's new in 1.1.0
+### 🆕 What's new in 1.2.0
+
+- 🍴 **Taken-over forks** (thanks to AuroreVgn for the idea): when the original repository of one of your forks is **archived**, you most likely took over the project. That fork is now shown like your own repos, without having to include all your forks. Option **Include forks whose original is archived**, on by default. See [Forks and archived repos](#forks-and-archived-repos).
+- 📌 **Repositories always shown**: a list of names shown no matter what, even forks or archived ones, the counterpart of “Repositories to ignore”.
+- 🔗 **A fork's original on the card**: a 🍴 icon next to the name, and in the details a “Fork of owner/repo” line linking to the original, with “original archived” when it is.
+
+![A taken-over fork on the card: fork icon next to the name and “Fork of …” line in the details](docs/images/fork.png)
+
+### What's new in 1.1.0
 
 - 🌍 **8 languages**: the integration (setup, options, entities, actions) is translated into English, French, German, Spanish, Italian, Dutch, Portuguese and Polish, following the language of Home Assistant. The **HOLM GitHub** card too, editor included; its `language` option lets you force a language.
 - 🇬🇧 English README.
@@ -67,9 +76,27 @@ Settings → Devices & services → **Add integration** → **HOLM GitHub**, the
 |---|---|---|
 | Update interval | How often repos are read | 15 min |
 | Read traffic | Views and clones over 14 days | yes |
-| Include forked repositories | | no |
-| Include archived repositories | | no |
-| Repositories to ignore | Comma-separated names | — |
+| Include forks whose original is archived | Shows the forks you took over (see below) | yes |
+| Include forked repositories | Shows **all** your forks, including those made to propose a pull request | no |
+| Include archived repositories | Shows your own archived repos (greyed out on the card) | no |
+| Repositories always shown | Comma-separated names, shown no matter what | — |
+| Repositories to ignore | Comma-separated names, never shown | — |
+
+In both lists, a repo is written by its name (`somfy-protexial`) or with its owner (`kaaribou/somfy-protexial`), case-insensitive.
+
+### Forks and archived repos
+
+By default, HOLM GitHub shows your own repos and leaves forks and archived repos aside. For each repo, the rule is applied in this order:
+
+1. **Repositories to ignore**: never shown, even if it is in the next list.
+2. **Repositories always shown**: shown, even a fork or archived.
+3. **Archived repo**: shown only if **Include archived repositories** is ticked.
+4. **Fork**: shown if **Include forked repositories** is ticked; otherwise, shown only if its original is archived and **Include forks whose original is archived** is ticked.
+5. All other repos are shown.
+
+**Why “the original is archived”?** When a project's author archives it, they no longer maintain it. If you have a fork of it, you are often the one who took over: your fork has become the main repo. Conversely, a fork of a still active project is usually there to propose a pull request, and does not belong among your projects.
+
+To know whether the original is archived, HOLM GitHub makes **one request per fork, once a day**: negligible compared with the GitHub quota. Untick the option if you want no forks at all: no more requests are made for them.
 
 ## The HOLM GitHub card
 
@@ -86,7 +113,8 @@ sort: activity      # activity, issues, stars, views, name
 - **Alert** when a check is failing.
 - **Filters** All, To do, Public, Private, **search** and **sort** by activity, issues, stars, views or name.
 - **One row per repo**: check light, version and date, issue and PR badges, stars, views over 14 days.
-- **Expandable details**: description and topics, statistics, latest release, latest commit, checks, list of issues and PRs with labels, and shortcuts to the repo, issues, PRs, releases and traffic.
+- **Icons next to the name**: 🔒 private repo, 🍴 fork (on hover: “Fork of owner/repo”). An archived repo is greyed out.
+- **Expandable details**: description and topics, statistics, for a fork the **Fork of owner/repo** line (link to the original, with “original archived” when it is), latest release, latest commit, checks, list of issues and PRs with labels, and shortcuts to the repo, issues, PRs, releases and traffic.
 
 | Option | Description | Default |
 |---|---|---|
@@ -138,6 +166,10 @@ actions:
 **No traffic for some repos.** GitHub only gives traffic to accounts that can write to the repo, and the token needs the `repo` scope (or read access to *Administration* for a fine-grained token).
 
 **API quota.** With a token, GitHub allows 5,000 requests per hour. An update costs about 4 requests per repo, and unchanged data doesn't count: even with 50 repos, you stay far from the limit.
+
+**One of my forks does not show.** Only forks whose original is archived are shown automatically. Add its name to **Repositories always shown**, or tick **Include forked repositories** to see them all.
+
+**A fork shows but I don't want it.** Add its name to **Repositories to ignore**, or untick **Include forks whose original is archived**.
 
 **The number of issues differs from GitHub.** GitHub counts issues and pull requests together; HOLM GitHub separates them.
 

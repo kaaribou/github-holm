@@ -10,6 +10,9 @@
   const LOCALES = { fr: "fr-FR", en: "en-GB", de: "de-DE", es: "es-ES", it: "it-IT", nl: "nl-NL", pt: "pt-PT", pl: "pl-PL" };
   const I18N = {
     "Automatique (profil)": ["Automatic (profile)", "Automatisch (Profil)", "Automático (perfil)", "Automatica (profilo)", "Automatisch (profiel)", "Automático (perfil)", "Automatycznie (profil)"],
+    "Fork de {p}": ["Fork of {p}", "Fork von {p}", "Fork de {p}", "Fork di {p}", "Fork van {p}", "Fork de {p}", "Fork z {p}"],
+    "Fork": ["Fork", "Fork", "Fork", "Fork", "Fork", "Fork", "Fork"],
+    "original archivé": ["original archived", "Original archiviert", "original archivado", "originale archiviato", "origineel gearchiveerd", "original arquivado", "oryginał zarchiwizowany"],
     "Langue": ["Language", "Sprache", "Idioma", "Lingua", "Taal", "Idioma", "Język"],
     "Titre": ["Title", "Titel", "Título", "Titolo", "Titel", "Título", "Tytuł"],
     "Titre (optionnel)": ["Title (optional)", "Titel (optional)", "Título (opcional)", "Titolo (facoltativo)", "Titel (optioneel)", "Título (opcional)", "Tytuł (opcjonalnie)"],
@@ -117,7 +120,7 @@
     if (o.selector && o.selector.select && o.name !== "language") o.selector = { ...o.selector, select: { ...o.selector.select, options: (o.selector.select.options || []).map((op) => (typeof op === "string" ? op : { ...op, label: _(op.label) })) } };
     if (o.name === "language" && o.selector && o.selector.select) o.selector = { ...o.selector, select: { ...o.selector.select, options: o.selector.select.options.map((op) => (op.value ? op : { ...op, label: _("Automatique (profil)") })) } };
     return o; });
-  const VERSION = "1.1.0";
+  const VERSION = "1.2.0";
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const nf = (n) => Number(n || 0).toLocaleString(NUMLOC);
   const short = (n) => { n = Number(n || 0); return n >= 10000 ? `${(n / 1000).toFixed(0)} k` : n >= 1000 ? `${(n / 1000).toLocaleString(NUMLOC, { maximumFractionDigits: 1, minimumFractionDigits: 1 })} k` : String(n); };
@@ -292,7 +295,7 @@
       return `<div class="repo${open ? " open" : ""}${r.archived ? " arch" : ""}">
         <button class="rh" data-open="${esc(r.full_name)}">
           <span class="ci ${ci}" title="${esc(_(ciL))}"></span>
-          <span class="rn"><b>${esc(r.name)}</b>${r.private ? `<ha-icon class="lock" icon="mdi:lock-outline" title="${_("Privé")}"></ha-icon>` : ""}${fresh ? `<i class="new">${_("nouveau")}</i>` : ""}
+          <span class="rn"><b>${esc(r.name)}</b>${r.private ? `<ha-icon class="lock" icon="mdi:lock-outline" title="${_("Privé")}"></ha-icon>` : ""}${r.fork ? `<ha-icon class="lock" icon="mdi:source-fork" title="${esc(r.parent ? _("Fork de {p}", { p: r.parent.full_name }) : _("Fork"))}"></ha-icon>` : ""}${fresh ? `<i class="new">${_("nouveau")}</i>` : ""}
             <small>${rel ? `<span class="tag">${esc(rel.tag)}</span>${ago(rel.date)}` : `<span class="tag none">${_("pas de release")}</span>`}${r.pushed ? ` · ${_("actif {t}", { t: ago(r.pushed) })}` : ""}</small></span>
           <span class="badges">
             ${r.open_issues ? `<span class="bd warn" title="${_("Issues ouvertes")}"><ha-icon icon="mdi:alert-circle-outline"></ha-icon>${r.open_issues}</span>` : ""}
@@ -322,6 +325,7 @@
           ${stat("mdi:download-outline", nf(r.downloads), _("téléchargements"))}
         </div>
         <div class="lines">
+          ${r.fork ? (r.parent ? `<a class="ln" href="${esc(r.parent.url)}" target="_blank" rel="noopener"><ha-icon icon="mdi:source-fork"></ha-icon><span>${_("Fork de {p}", { p: `<b>${esc(r.parent.full_name)}</b>` })}</span>${r.parent.archived ? `<small>${_("original archivé")}</small>` : ""}</a>` : `<div class="ln"><ha-icon icon="mdi:source-fork"></ha-icon><span>${_("Fork")}</span></div>`) : ""}
           ${r.release ? `<a class="ln" href="${esc(r.release.url)}" target="_blank" rel="noopener"><ha-icon icon="mdi:tag-outline"></ha-icon><span>${_("Dernière release")} <b>${esc(r.release.tag)}</b>${r.release.name && r.release.name !== r.release.tag ? ` — ${esc(r.release.name)}` : ""}</span><small>${ago(r.release.date)}</small></a>` : ""}
           ${r.commit ? `<a class="ln" href="${esc(r.commit.url)}" target="_blank" rel="noopener"><ha-icon icon="mdi:source-commit"></ha-icon><span>${esc(r.commit.message)} <code>${esc(r.commit.sha)}</code></span><small>${ago(r.commit.date)}</small></a>` : ""}
           ${r.ci ? `<a class="ln" href="${esc(r.ci.url)}" target="_blank" rel="noopener"><i class="ci ${ci}"></i><span>${esc(_(ciL))} · ${esc(r.ci.name || "")}</span><small>${ago(r.ci.date)}</small></a>` : ""}

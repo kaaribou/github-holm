@@ -33,9 +33,17 @@
         "data": {
           "scan_interval": "Bijwerkinterval",
           "traffic": "Verkeer lezen (weergaven en klonen, 14 dagen)",
+          "forks_of_archived": "Forks opnemen waarvan het origineel gearchiveerd is",
           "include_forks": "Geforkte repositories meenemen",
           "include_archived": "Gearchiveerde repositories meenemen",
+          "include": "Altijd getoonde repo's (namen gescheiden door komma's)",
           "exclude": "Te negeren repositories (namen gescheiden door komma's)"
+        },
+        "data_description": {
+          "forks_of_archived": "Een fork waarvan de originele repo gearchiveerd is, is meestal een project dat u hebt overgenomen: hij wordt getoond, ook zonder de volgende optie.",
+          "include_forks": "Toont al uw forks, ook die voor het voorstellen van een pull request.",
+          "include": "Altijd getoond, ook forks of gearchiveerde. Bijv.: somfy-protexial, mijn-fork",
+          "exclude": "Nooit getoond, ook als ze in de vorige lijst staan."
         }
       }
     }

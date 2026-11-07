@@ -33,9 +33,17 @@
         "data": {
           "scan_interval": "Update interval",
           "traffic": "Read traffic (views and clones, 14 days)",
+          "forks_of_archived": "Include forks whose original is archived",
           "include_forks": "Include forked repositories",
           "include_archived": "Include archived repositories",
+          "include": "Repositories always shown (comma-separated names)",
           "exclude": "Repositories to ignore (comma-separated names)"
+        },
+        "data_description": {
+          "forks_of_archived": "A fork whose original repository is archived is usually a project you took over: it is shown even without the next option.",
+          "include_forks": "Shows all your forks, including those made to propose a pull request.",
+          "include": "Shown no matter what, even forks or archived. E.g.: somfy-protexial, my-fork",
+          "exclude": "Never shown, even if they are in the previous list."
         }
       }
     }

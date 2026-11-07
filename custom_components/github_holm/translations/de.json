@@ -33,9 +33,17 @@
         "data": {
           "scan_interval": "Aktualisierungsintervall",
           "traffic": "Traffic lesen (Aufrufe und Klone, 14 Tage)",
+          "forks_of_archived": "Forks einbeziehen, deren Original archiviert ist",
           "include_forks": "Geforkte Repositories einbeziehen",
           "include_archived": "Archivierte Repositories einbeziehen",
+          "include": "Immer angezeigte Repos (Namen durch Kommas getrennt)",
           "exclude": "Zu ignorierende Repositories (Namen durch Komma getrennt)"
+        },
+        "data_description": {
+          "forks_of_archived": "Ein Fork, dessen Original-Repo archiviert ist, ist meist ein von Ihnen übernommenes Projekt: Er wird auch ohne die nächste Option angezeigt.",
+          "include_forks": "Zeigt alle Ihre Forks an, auch solche für Pull Requests.",
+          "include": "Werden immer angezeigt, auch Forks oder archivierte. Z. B.: somfy-protexial, mein-fork",
+          "exclude": "Werden nie angezeigt, auch wenn sie in der vorherigen Liste stehen."
         }
       }
     }

@@ -12,7 +12,8 @@ from homeassistant.helpers.selector import (BooleanSelector, NumberSelector, Num
                                             TextSelector, TextSelectorConfig, TextSelectorType)
 
 from .api import GitHubAuthError, GitHubClient, GitHubError
-from .const import CONF_ARCHIVED, CONF_EXCLUDE, CONF_FORKS, CONF_SCAN, CONF_TOKEN, CONF_TRAFFIC, DEFAULT_SCAN, DOMAIN
+from .const import (CONF_ARCHIVED, CONF_EXCLUDE, CONF_FORKS, CONF_FORKS_ARCHIVED, CONF_INCLUDE, CONF_SCAN, CONF_TOKEN,
+                    CONF_TRAFFIC, DEFAULT_SCAN, DOMAIN)
 
 TOKEN_SCHEMA = vol.Schema({vol.Required(CONF_TOKEN): TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD))})
 
@@ -74,8 +75,10 @@ class HolmGitHubOptionsFlow(OptionsFlow):
             vol.Required(CONF_SCAN, default=o.get(CONF_SCAN, DEFAULT_SCAN)):
                 NumberSelector(NumberSelectorConfig(min=5, max=180, step=5, mode=NumberSelectorMode.BOX, unit_of_measurement="min")),
             vol.Required(CONF_TRAFFIC, default=o.get(CONF_TRAFFIC, True)): BooleanSelector(),
+            vol.Required(CONF_FORKS_ARCHIVED, default=o.get(CONF_FORKS_ARCHIVED, True)): BooleanSelector(),
             vol.Required(CONF_FORKS, default=o.get(CONF_FORKS, False)): BooleanSelector(),
             vol.Required(CONF_ARCHIVED, default=o.get(CONF_ARCHIVED, False)): BooleanSelector(),
+            vol.Optional(CONF_INCLUDE, default=o.get(CONF_INCLUDE, "")): TextSelector(),
             vol.Optional(CONF_EXCLUDE, default=o.get(CONF_EXCLUDE, "")): TextSelector(),
         })
         return self.async_show_form(step_id="init", data_schema=schema)
